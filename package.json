@@ -1,0 +1,13 @@
+{
+  "name": "SerialTest",
+  "version": "0.0.1",
+  "description": "Test test",
+  "author": "Ian Kropp",
+  "scripts": {
+  },
+  "dependencies": {
+    "serialport": "^4.0.7"
+  },
+  "devDependencies": {
+  }
+}
