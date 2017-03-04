@@ -16,6 +16,13 @@ port.on('data',function(data){
 
   var packet = data.readUInt8(0);
 
+  processData(packet)
+
+});
+
+
+function processData(packet){
+
   // If we're at a new frame, and the data is 0F
   if(! currentFrame.length && packet == 0x0F){
     // Add to frame
@@ -46,7 +53,6 @@ port.on('data',function(data){
 
   }
 
-});
-
+}
 
 
