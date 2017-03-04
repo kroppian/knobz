@@ -6,9 +6,11 @@
 #include <avr/interrupt.h>
 #include "libuart.h"
 
-volatile unsigned char receivedByte;
+#define CHANNEL_1 0
+#define CHANNEL_2 (1 << MUX0)
+#define ADMUX_DEFAULT (1 << REFS0) | (1 << ADLAR)
 
-int counter = 0;
+volatile unsigned char receivedByte;
 
 int main()
 {
@@ -29,13 +31,11 @@ int main()
   // come from the datasheet 
   ADCSRA |= (1 << ADPS0) | (1 << ADPS1) | (1 << ADPS2);
  
-  ADMUX |= (1 << ADLAR);
-
   // Set the reference voltage source
-  ADMUX |= (1 << REFS0);
+  ADMUX |= ADMUX_DEFAULT;
 
   ADCSRA |= (1 << ADIE);
-  ADCSRA |=  (1 << ADEN);
+  ADCSRA |= (1 << ADEN);
 
   sei();
 
@@ -55,12 +55,24 @@ ISR(ADC_vect){
   // all spaces as filler
   int myNum = ADCH;
 
-  uart_send(0x0F);  
-  uart_send(myNum); 
-  uart_send(counter);  
-  uart_send(0xF0);  
+  switch(ADMUX){
+    case (ADMUX_DEFAULT | CHANNEL_1): 
+      ADMUX = ADMUX_DEFAULT | CHANNEL_2;
+      uart_send(0x0F);  
+      uart_send(myNum); 
+      break;
+    case (ADMUX_DEFAULT | CHANNEL_2): 
+      ADMUX = ADMUX_DEFAULT | CHANNEL_1;
+      uart_send(myNum);  
+      uart_send(0xF0);  
+      break;
+    default:
 
-  counter = (++counter) % 255;
+      uart_send(0xFF);  
+      uart_send(ADMUX);  
+      break;
+
+  }
 
   // Turn on the ADC filter
   ADCSRA |= (1 << ADSC);

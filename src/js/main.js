@@ -1,4 +1,6 @@
 
+console.log("Starting!");
+
 // Setting things up
 var SerialPort = require('serialport');
 var port = new SerialPort('/dev/ttyUSB0', {
