@@ -14,12 +14,6 @@
 #define CHANNEL_5 (1 << MUX2) | (1 << MUX0)
 #define ADMUX_DEFAULT (1 << REFS0) | (1 << ADLAR)
 
-// 0000
-// 0001
-// 0010
-// 0011
-// 0100
-
 volatile unsigned char receivedByte;
 
 int main()
@@ -70,32 +64,47 @@ ISR(ADC_vect){
 
   switch(ADMUX){
     case (ADMUX_DEFAULT | CHANNEL_0): 
+      // Switch to next channel
       ADMUX = ADMUX_DEFAULT | CHANNEL_1;
+      // Open packet
       uart_send(0x0F);  
+      // Send current levels
       uart_send(myNum); 
       break;
     case (ADMUX_DEFAULT | CHANNEL_1): 
+      // Switch to next channel
       ADMUX = ADMUX_DEFAULT | CHANNEL_2;
+      // Send current levels
       uart_send(myNum);  
       break;
     case (ADMUX_DEFAULT | CHANNEL_2): 
+      // Switch to next channel
       ADMUX = ADMUX_DEFAULT | CHANNEL_3;
+      // Send current levels
       uart_send(myNum);  
       break;
     case (ADMUX_DEFAULT | CHANNEL_3): 
+      // Switch to next channel
       ADMUX = ADMUX_DEFAULT | CHANNEL_4;
+      // Send current levels
       uart_send(myNum);  
       break;
     case (ADMUX_DEFAULT | CHANNEL_4): 
+      // Switch to next channel
       ADMUX = ADMUX_DEFAULT | CHANNEL_5;
+      // Send current levels
       uart_send(myNum);  
       break;
     case (ADMUX_DEFAULT | CHANNEL_5): 
+      // Switch to first channel
       ADMUX = ADMUX_DEFAULT | CHANNEL_0;
+      // Send current levels
       uart_send(myNum);  
+      // Close packet
       uart_send(0xF0);  
       break;
     default:
+      // error handling
       uart_send(0xFF);  
       uart_send(ADMUX);  
       break;
