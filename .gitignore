@@ -3,3 +3,9 @@
 
 node_modules
 
+*.eep
+*.elf
+*.hex
+*.o
+*.swp
+
