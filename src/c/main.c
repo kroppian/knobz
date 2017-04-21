@@ -49,7 +49,6 @@ int main()
 }
 
 
-  int ugh = 0;
 ISR(ADC_vect){
 
   int myNum = ADCH;
@@ -59,15 +58,11 @@ ISR(ADC_vect){
       ADMUX = ADMUX_DEFAULT | CHANNEL_2;
       uart_send(0x0F);  
       uart_send(myNum); 
-      ugh++;
-      ugh = ugh % 20;
       break;
     case (ADMUX_DEFAULT | CHANNEL_2): 
       ADMUX = ADMUX_DEFAULT | CHANNEL_1;
       uart_send(myNum);  
       uart_send(0xF0);  
-      ugh++;
-      ugh = ugh % 20;
       break;
     default:
       uart_send(0xFF);  
