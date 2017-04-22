@@ -1,6 +1,5 @@
 
 *tgz
-
 node_modules
 
 *.eep
@@ -8,4 +7,7 @@ node_modules
 *.hex
 *.o
 *.swp
+
+*.pdf
+
 
